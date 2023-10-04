@@ -1,0 +1,8 @@
+---
+- name: Set vagrant box state {{ vagrant_box_dir }}
+  command:
+    cmd: vagrant up
+    chdir: "{{ vagrant_box_dir }}"
+  environment:
+    VAGRANT_DEFAULT_PROVIDER: libvirt
+    VAGRANT_HOME: "{{ user_vagrant_home_path }}" # ~/.vagrant.d is default
