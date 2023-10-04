@@ -1,0 +1,30 @@
+---
+- include_role:
+    name: qemu_img_file
+  vars:
+    qemu_image_file_name: almatestimg
+
+- name: Copy iso to remote
+  copy:
+    dest: "{{ managed_iso_file_path }}"
+    src: "{{ managed_iso_file_path }}"
+  vars:
+    managed_iso_filename: AlmaLinux-8-latest-x86_64-minimal.iso
+    managed_iso_file_path: "{{ (managed_iso_files_path, managed_iso_filename) | path_join }}"
+
+- name: Domain (VM) setup
+  command:
+    argv:
+      - virt-install
+      - --name {{ almalinux_vm_name }}
+      - --memory 1024
+      - --vcpus=2,maxvcpus=4
+      - --cpu host
+      - --cdrom {{ managed_iso_file_path }}
+      - --disk size=2,format=qcow2
+      - --network user
+      - --virt-type kvm
+  vars:
+    managed_iso_filename: AlmaLinux-8-latest-x86_64-minimal.iso
+    managed_iso_file_path: "{{ (managed_iso_files_path, managed_iso_filename) | path_join }}"
+    almalinux_vm_name: almatestthing
