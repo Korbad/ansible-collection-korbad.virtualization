@@ -1,0 +1,2 @@
+---
+managed_iso_files_path: "{{ (ansible_env.HOME, 'managed_iso_files') | path_join }}"
