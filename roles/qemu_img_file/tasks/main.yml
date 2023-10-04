@@ -1,0 +1,12 @@
+---
+- name: Ensure that the qemu image files path exists at {{ qemu_image_files_path }}
+  file:
+    state: directory
+    path: "{{ qemu_image_files_path }}"
+
+- name: Generate qemu image file if it doesn't exist
+  command:
+    cmd: qemu-img create -f qcow2 {{ qemu_image_file_path }} 4G
+    creates: "{{ qemu_image_file_path }}"
+  vars:
+    qemu_image_file_path: "{{ (qemu_image_files_path, qemu_image_file_name) | path_join }}"

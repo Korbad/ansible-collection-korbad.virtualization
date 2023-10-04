@@ -1,0 +1,2 @@
+---
+qemu_image_files_path: "{{ (ansible_env.HOME, 'managed_qemu_image_files') | path_join }}"
