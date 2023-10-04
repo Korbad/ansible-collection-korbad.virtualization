@@ -1,0 +1,27 @@
+---
+- name: Ensure host is available via ssh using public keys from github.com/korbad.keys
+  hosts: all
+  gather_facts: true
+  become: true
+  handlers:
+  - name: restart_sshd
+    service:
+      name: sshd
+      state: restarted
+  tasks:
+  - name: Install open-ssh
+    dnf:
+      name: openssh-server
+  - name: Create korbad user
+    user:
+      name: korbad
+      state: present
+      shell: /bin/bash
+  - name: Pull authroized keys from github
+    authorized_key:
+      key: http://github.com/korbad.keys
+      user: korbad
+    notify: restart_sshd
+  - copy:
+      dest: /etc/sudoers.d/korbad
+      content: "korbad ALL=(root) NOPASSWD: ALL"

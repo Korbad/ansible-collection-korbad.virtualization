@@ -1,0 +1,15 @@
+---
+- name: Ensure directory exists for managed vagrant file
+  file:
+    state: directory
+    path: "{{ vagrant_box_dir }}/"
+
+- name: Copy playbook to local directory
+  copy:
+    src: "{{ provisioner_playbook }}"
+    dest: "{{ (vagrant_box_dir, provisioner_playbook) | path_join }}"
+
+- name: Copy Vagrantfile to local directory
+  template:
+    src: Vagrantfile.j2
+    dest: "{{ vagrant_box_dir }}/Vagrantfile"
